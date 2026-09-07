@@ -631,7 +631,20 @@ export async function executeScheduledTask(
 				planningResult
 			};
 		}
-
+		console.log(
+  'TEMPERATURE_CONTROL_DEBUG',
+  JSON.stringify(
+    devices.map((d: any) => ({
+      id: d.id,
+      managementPoints: d.managementPoints?.map((mp: any) => ({
+        id: mp.id,
+        temperatureControl: mp.temperatureControl
+      }))
+    })),
+    null,
+    2
+  )
+);
 		// Get the first device
 		const device = await getDeviceDetails(accessToken, devices[0].id);
 		const deviceState = parseDeviceState(device);
