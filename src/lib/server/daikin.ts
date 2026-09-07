@@ -159,11 +159,7 @@ export async function getValidAccessToken(
 /**
  * Make authenticated API request to Daikin
  */
-    console.log('DAIKIN_PATCH_DEBUG', JSON.stringify({
-        endpoint,
-        body
-    }));
-
+    
 async function apiRequest<T>(
 	accessToken: string,
 	endpoint: string,
@@ -293,7 +289,13 @@ export async function setHeatingTemperature(
     const setpointKey = isWaterOffset
         ? 'leavingWaterOffset'
         : 'leavingWaterTemperature';
-
+console.log('DAIKIN_HEATING_DEBUG', JSON.stringify({
+    deviceId,
+    managementPointId,
+    value,
+    isWaterOffset,
+    setpointKey
+}));
     await apiRequest(
         accessToken,
         `/gateway-devices/${deviceId}/management-points/${managementPointId}/characteristics/temperatureControl`,
