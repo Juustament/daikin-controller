@@ -748,9 +748,8 @@ decision = {
 				}
 			}
 		}
-const heatingTargetTemp = Math.max(
-    20,
-    Math.min(30, 25 + decision.targetTemperature * 0.5)
+const heatingTargetTemp = Math.round(
+	Math.max(20, Math.min(30, 25 + decision.targetTemperature * 0.5))
 );
 			const messages: string[] = [];
 			let effectiveHeatingOffset = deviceState.target_offset;
