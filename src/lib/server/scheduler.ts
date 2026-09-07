@@ -797,7 +797,7 @@ const heatingTargetTemp = Math.max(
 						accessToken,
 						device.id,
 						climateControlId,
-						decision.targetTemperature,
+						heatingTargetTemp,
 						false
 					);
 
