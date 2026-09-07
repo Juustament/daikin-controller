@@ -933,15 +933,22 @@ export async function previewControlAction(
 		// Try to get planned offset
 		const plannedOffset = await getPlannedOffsetForHour(db, todayStr, currentHour, userId);
 
-		if (plannedOffset !== null) {
-			const action: ControlAction = plannedOffset >= 5 ? 'boost' : plannedOffset <= -5 ? 'reduce' : 'normal';
-			return {
-				action,
-				reason: `Planeeritud nihe: ${plannedOffset}`,
-				targetTemperature: plannedOffset,
-				currentPrice: currentPriceCentKwh
-			};
-		}
+	if (plannedOffset !== null) {
+	const action: ControlAction = plannedOffset >= 5 ? 'boost' : plannedOffset <= -5 ? 'reduce' : 'normal';
+
+	const heatingTargetTemperature = Math.max(
+		20,
+		Math.min(30, 25 + plannedOffset * 0.5)
+	);
+
+	return {
+		action,
+		reason: `Planeeritud nihe: ${plannedOffset}`,
+		targetTemperature: plannedOffset,
+		heatingTargetTemperature,
+		currentPrice: currentPriceCentKwh
+	};
+}
 
 		// Fallback
 		const todayPrices = await getTodayPrices(db);
