@@ -600,16 +600,6 @@ export async function executeScheduledTask(
 			}
 		}
 
-		// Check if this hour was already processed (run once per hour, not every 15 min)
-		const alreadyApplied = await isHourAlreadyApplied(db, todayStr, currentHour, userId);
-		if (alreadyApplied) {
-			return {
-				success: true,
-				message: `Tund ${currentHour} juba töödeldud, vahele jäetud`,
-				planningResult
-			};
-		}
-
 		// Get current price
 		const currentPriceEurMwh = await getCurrentHourPrice(db);
 		if (currentPriceEurMwh === null) {
