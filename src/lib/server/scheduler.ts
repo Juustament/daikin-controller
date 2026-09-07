@@ -543,12 +543,18 @@ function calculateFallbackHeatingAction(
 		}
 	}
 
-	return {
-		action,
-		reason: reasons.join('; '),
-		targetTemperature: targetOffset,
-		currentPrice: currentPriceCentKwh
-	};
+	const heatingTargetTemperature = Math.max(
+	20,
+	Math.min(30, 25 + targetOffset * 0.5)
+);
+
+return {
+	action,
+	reason: reasons.join('; '),
+	targetTemperature: targetOffset,
+	heatingTargetTemperature,
+	currentPrice: currentPriceCentKwh
+};
 }
 
 /**
