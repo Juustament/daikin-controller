@@ -249,12 +249,13 @@ export function parseDeviceState(device: DaikinDevice): DeviceState {
 
 		// Get temperature control setpoint (offset for water-based)
 		const tempControl = climateControl.temperatureControl as {
-			value?: {
-				operationModes?: {
-					heating?: { setpoints?: Record<string, { value?: number }> };
-				};
-			};
-		} | undefined;
+    value?: {
+        operationModes?: {
+            auto?: { setpoints?: Record<string, { value?: number }> };
+            heating?: { setpoints?: Record<string, { value?: number }> };
+        };
+    };
+} | undefined;
 
 		const operationModes = tempControl?.value?.operationModes;
 const setpoints =
