@@ -159,6 +159,12 @@ export async function getValidAccessToken(
 /**
  * Make authenticated API request to Daikin
  */
+if (method === 'PATCH') {
+    console.log('DAIKIN_PATCH_DEBUG', JSON.stringify({
+        endpoint,
+        body
+    }));
+}
 async function apiRequest<T>(
 	accessToken: string,
 	endpoint: string,
