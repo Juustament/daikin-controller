@@ -5,8 +5,8 @@ name = "daikin-cron"
 main = "index.ts"
 compatibility_date = "2024-12-01"
 
-[triggers]
-crons = ["0 * * * *"]  # Every hour
+#[triggers]
+#crons = ["0 * * * *"]  # Every hour
 
 [vars]
 APP_URL = "https://daikin-controller-dq3.pages.dev"
