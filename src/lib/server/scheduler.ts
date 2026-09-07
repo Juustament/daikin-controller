@@ -507,11 +507,12 @@ function calculateFallbackHeatingAction(
 	// Safety check
 	if (waterTemp !== null && waterTemp <= minWaterTemp) {
 		return {
-			action: 'boost',
-			reason: `Vee temp ${waterTemp}°C miinimumi ${minWaterTemp}°C juures - hädakütmine`,
-			targetTemperature: 10,
-			currentPrice: currentPriceCentKwh
-		};
+	action: 'boost',
+	reason: `Vee temp ${waterTemp}°C miinimumi ${minWaterTemp}°C juures - hädakütmine`,
+	targetTemperature: 10,
+	heatingTargetTemperature: 30,
+	currentPrice: currentPriceCentKwh
+};
 	}
 
 	// Find cheapest hour in window
@@ -674,9 +675,8 @@ export async function executeScheduledTask(
 			if (plannedOffset !== null) {
 				// Use pre-planned schedule
 				const action: ControlAction = plannedOffset >= 5 ? 'boost' : plannedOffset <= -5 ? 'reduce' : 'normal';
-				const plannedHeatingTargetTemp = Math.max(
-	20,
-	Math.min(30, 25 + plannedOffset * 0.5)
+			const plannedHeatingTargetTemp = Math.round(
+	Math.max(20, Math.min(30, 25 + plannedOffset * 0.5))
 );
 
 decision = {
