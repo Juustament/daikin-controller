@@ -748,60 +748,62 @@ const heatingTargetTemp = Math.max(
 			let heatingSetSucceeded = !hasPlannedHeating;
 
 			// Apply heating temperature change
-			// Skip SET if previous hour had the same planned offset (device already at correct value)
-			const heatingSkipSet = prevPlannedOffset !== null && prevPlannedOffset === decision.targetTemperature;
-			if (heatingSkipSet) {
-				effectiveHeatingOffset = decision.targetTemperature;
-				heatingSetSucceeded = true;
-				messages.push(`Küte: nihe ${decision.targetTemperature} sama mis eelmisel tunnil, vahele jäetud`);
-			} else if (climateControlId && deviceState.target_offset !== decision.targetTemperature) {
-				try {
-					await setHeatingTemperature(
-						accessToken,
-						device.id,
-						climateControlId,
-						heatingTargetTemp,
-						false
-					);
+// deviceState.target_offset now contains the actual Daikin leaving-water target temperature
+if (climateControlId && deviceState.target_offset !== heatingTargetTemp) {
+    try {
+        await setHeatingTemperature(
+            accessToken,
+            device.id,
+            climateControlId,
+            heatingTargetTemp,
+            false
+        );
 
-					await logControlAction(db, {
-						timestamp: new Date().toISOString(),
-						action: decision.action,
-						reason: decision.reason,
-						price_eur_mwh: currentPriceEurMwh,
-						old_target_temp: deviceState.target_offset,
-						new_target_temp: decision.targetTemperature
-					}, userId);
+        await logControlAction(db, {
+            timestamp: new Date().toISOString(),
+            action: decision.action,
+            reason: decision.reason,
+            price_eur_mwh: currentPriceEurMwh,
+            old_target_temp: deviceState.target_offset,
+            new_target_temp: heatingTargetTemp
+        }, userId);
 
-					effectiveHeatingOffset = decision.targetTemperature;
-					heatingSetSucceeded = true;
-					messages.push(`Küte: nihe ${deviceState.target_offset} -> ${decision.targetTemperature} (${decision.action})`);
-				} catch (setError) {
-					const errMsg = setError instanceof Error ? setError.message : String(setError);
-					console.error(`Failed to set heating temperature: ${errMsg}`);
+        effectiveHeatingOffset = heatingTargetTemp;
+        heatingSetSucceeded = true;
+        messages.push(
+            `Küte: siht ${deviceState.target_offset}°C -> ${heatingTargetTemp}°C (${decision.action})`
+        );
+    } catch (setError) {
+        const errMsg = setError instanceof Error ? setError.message : String(setError);
+        console.error(`Failed to set heating temperature: ${errMsg}`);
 
-					await logControlAction(db, {
-						timestamp: new Date().toISOString(),
-						action: 'error',
-						reason: `Kütte nihe ${deviceState.target_offset} -> ${decision.targetTemperature} ebaõnnestus: ${errMsg}`,
-						price_eur_mwh: currentPriceEurMwh,
-						old_target_temp: deviceState.target_offset,
-						new_target_temp: decision.targetTemperature
-					}, userId);
+        await logControlAction(db, {
+            timestamp: new Date().toISOString(),
+            action: 'error',
+            reason: `Kütte siht ${deviceState.target_offset}°C -> ${heatingTargetTemp}°C ebaõnnestus: ${errMsg}`,
+            price_eur_mwh: currentPriceEurMwh,
+            old_target_temp: deviceState.target_offset,
+            new_target_temp: heatingTargetTemp
+        }, userId);
 
-					heatingSetSucceeded = false;
-					messages.push(`Küte: VIGA seadistamisel (${errMsg})`);
-				}
-			} else {
-				if (!climateControlId && deviceState.target_offset !== decision.targetTemperature) {
-					heatingSetSucceeded = false;
-					messages.push(`Küte: kliimaseadme ID puudub, nihet ei saanud rakendada (${decision.targetTemperature})`);
-				} else {
-					effectiveHeatingOffset = decision.targetTemperature;
-					heatingSetSucceeded = true;
-					messages.push(`Küte: muutust pole (nihe ${decision.targetTemperature})`);
-				}
-			}
+        heatingSetSucceeded = false;
+        messages.push(`Küte: VIGA seadistamisel (${errMsg})`);
+    }
+} else {
+    if (!climateControlId) {
+        heatingSetSucceeded = false;
+        messages.push(`Küte: kliimaseadme ID puudub`);
+    } else {
+        effectiveHeatingOffset = heatingTargetTemp;
+        heatingSetSucceeded = true;
+        messages.push(`Küte: muutust pole (siht ${heatingTargetTemp}°C)`);
+    }
+}
+
+
+
+
+		
 			if (hasPlannedHeating && heatingSetSucceeded) {
 				await markHeatingScheduleApplied(db, todayStr, currentHour, userId);
 			}
