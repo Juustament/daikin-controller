@@ -256,12 +256,18 @@ export function parseDeviceState(device: DaikinDevice): DeviceState {
 			};
 		} | undefined;
 
-		if (tempControl?.value?.operationModes?.heating?.setpoints) {
-			const setpoints = tempControl.value.operationModes.heating.setpoints;
-			if (setpoints.leavingWaterOffset?.value !== undefined) {
-				targetOffset = setpoints.leavingWaterOffset.value;
-			}
-		}
+		const operationModes = tempControl?.value?.operationModes;
+const setpoints =
+    operationModes?.auto?.setpoints ??
+    operationModes?.heating?.setpoints;
+
+if (setpoints) {
+    if (setpoints.leavingWaterTemperature?.value !== undefined) {
+        targetOffset = setpoints.leavingWaterTemperature.value;
+    } else if (setpoints.leavingWaterOffset?.value !== undefined) {
+        targetOffset = setpoints.leavingWaterOffset.value;
+    }
+}
 	}
 
 	return {
