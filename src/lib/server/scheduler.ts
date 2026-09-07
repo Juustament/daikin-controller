@@ -631,20 +631,7 @@ export async function executeScheduledTask(
 				planningResult
 			};
 		}
-		function findSettable(obj: any, path = ''): any[] {
-    const result: any[] = [];
-
-    if (!obj || typeof obj !== 'object') {
-        return result;
-    }
-
-    if (obj.settable === true) {
-        result.push({
-            path,
-            ref: obj.ref,
-            value: obj.value
-        });
-    }
+		
 
     
 		// Get the first device
