@@ -64,8 +64,8 @@
 						<div>
 							<p class="text-2xl font-bold text-primary">
 								{data.deviceState.target_offset !== null && data.deviceState.target_offset !== undefined
-									? (data.deviceState.target_offset > 0 ? '+' : '') + data.deviceState.target_offset
-									: '--'}
+    ? data.deviceState.target_offset + '°C'
+    : '--'}
 							</p>
 							<p class="text-sm opacity-70">{$t.device.setpoint}</p>
 						</div>
