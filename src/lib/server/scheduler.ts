@@ -795,7 +795,7 @@ console.log(
 						device.id,
 						climateControlId,
 						decision.targetTemperature,
-						true
+						false
 					);
 
 					await logControlAction(db, {
