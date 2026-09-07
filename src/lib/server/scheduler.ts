@@ -631,6 +631,32 @@ export async function executeScheduledTask(
 				planningResult
 			};
 		}
+		function findSettable(obj: any, path = ''): any[] {
+    const result: any[] = [];
+
+    if (!obj || typeof obj !== 'object') {
+        return result;
+    }
+
+    if (obj.settable === true) {
+        result.push({
+            path,
+            ref: obj.ref,
+            value: obj.value
+        });
+    }
+
+    for (const [key, val] of Object.entries(obj)) {
+        result.push(...findSettable(val, path ? `${path}.${key}` : key));
+    }
+
+    return result;
+}
+
+console.log(
+    'SETTABLE_DEBUG',
+    JSON.stringify(findSettable(devices), null, 2)
+);
 		console.log(
   'TEMPERATURE_CONTROL_DEBUG',
   JSON.stringify(
