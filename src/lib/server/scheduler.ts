@@ -669,12 +669,18 @@ export async function executeScheduledTask(
 			if (plannedOffset !== null) {
 				// Use pre-planned schedule
 				const action: ControlAction = plannedOffset >= 5 ? 'boost' : plannedOffset <= -5 ? 'reduce' : 'normal';
-				decision = {
-					action,
-					reason: `Planeeritud nihe: ${plannedOffset} (hind ${currentPriceCentKwh.toFixed(1)} s/kWh)`,
-					targetTemperature: plannedOffset,
-					currentPrice: currentPriceCentKwh
-				};
+				const plannedHeatingTargetTemp = Math.max(
+	20,
+	Math.min(30, 25 + plannedOffset * 0.5)
+);
+
+decision = {
+	action,
+	reason: `Planeeritud nihe: ${plannedOffset} (hind ${currentPriceCentKwh.toFixed(1)} s/kWh)`,
+	targetTemperature: plannedOffset,
+	heatingTargetTemperature: plannedHeatingTargetTemp,
+	currentPrice: currentPriceCentKwh
+};
 			} else {
 			// Fallback: no schedule exists, use legacy algorithm
 			const todayPrices = await getTodayPrices(db);
