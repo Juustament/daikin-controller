@@ -2,7 +2,7 @@
 
 Reduce your heating costs by automatically running your Daikin heat pump during cheap electricity hours.
 
-**[Try it free at daikin-controller.pages.dev](https://daikin-controller.pages.dev/)**
+
 
 ## What It Does
 
