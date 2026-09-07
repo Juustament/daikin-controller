@@ -543,9 +543,8 @@ function calculateFallbackHeatingAction(
 		}
 	}
 
-	const heatingTargetTemperature = Math.max(
-	20,
-	Math.min(30, 25 + targetOffset * 0.5)
+	const heatingTargetTemperature = Math.round(
+	Math.max(20, Math.min(30, 25 + plannedOffset * 0.5))
 );
 
 return {
