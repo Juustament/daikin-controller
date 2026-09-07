@@ -289,13 +289,7 @@ export async function setHeatingTemperature(
     const setpointKey = isWaterOffset
         ? 'leavingWaterOffset'
         : 'leavingWaterTemperature';
-console.log('DAIKIN_HEATING_DEBUG', JSON.stringify({
-    deviceId,
-    managementPointId,
-    value,
-    isWaterOffset,
-    setpointKey
-}));
+
     await apiRequest(
         accessToken,
         `/gateway-devices/${deviceId}/management-points/${managementPointId}/characteristics/temperatureControl`,
