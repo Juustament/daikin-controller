@@ -279,19 +279,25 @@ export function parseDeviceState(device: DaikinDevice): DeviceState {
  * For air-based systems: sets roomTemperature
  */
 export async function setHeatingTemperature(
-	accessToken: string,
-	deviceId: string,
-	managementPointId: string,
-	value: number,
-	isWaterOffset: boolean = true
+    accessToken: string,
+    deviceId: string,
+    managementPointId: string,
+    value: number,
+    isWaterOffset: boolean = true
 ): Promise<void> {
-	const setpointKey = isWaterOffset ? 'leavingWaterOffset' : 'leavingWaterTemperature';
-await apiRequest(
-    accessToken,
-    `/gateway-devices/${deviceId}/management-points/${managementPointId}/characteristics/temperatureControl/operationModes/heating/setpoints/${setpointKey}`,
-    'PATCH',
-    value
-);
+    const setpointKey = isWaterOffset
+        ? 'leavingWaterOffset'
+        : 'leavingWaterTemperature';
+
+    await apiRequest(
+        accessToken,
+        `/gateway-devices/${deviceId}/management-points/${managementPointId}/characteristics/temperatureControl`,
+        'PATCH',
+        {
+            value: value,
+            path: `/operationModes/heating/setpoints/${setpointKey}`
+        }
+    );
 }
 
 /**
