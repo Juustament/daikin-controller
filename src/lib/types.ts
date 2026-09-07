@@ -129,7 +129,8 @@ export type ControlAction = 'boost' | 'normal' | 'reduce' | 'none';
 export interface ControlDecision {
 	action: ControlAction;
 	reason: string;
-	targetTemperature: number;
+	targetTemperature: number; // Internal price-based offset (-10...+10)
+	heatingTargetTemperature?: number; // Actual Daikin leaving-water target in °C
 	currentPrice: number;
 }
 
