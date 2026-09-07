@@ -295,7 +295,7 @@ export async function setHeatingTemperature(
         'PATCH',
         {
             value: value,
-            path: `/operationModes/heating/setpoints/${setpointKey}`
+            path: `/operationModes/auto/setpoints/${setpointKey}`
         }
     );
 }
