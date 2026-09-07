@@ -11,7 +11,6 @@ import {
 	saveDHWSchedule,
 	getPlannedOffsetForHour,
 	getPlannedDHWTempForHour,
-	isHourAlreadyApplied,
 	markHeatingScheduleApplied,
 	markDHWScheduleApplied,
 	cleanupOldSchedules,
