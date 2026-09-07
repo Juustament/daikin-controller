@@ -287,24 +287,12 @@ export async function setHeatingTemperature(
 ): Promise<void> {
 	const setpointKey = isWaterOffset ? 'leavingWaterOffset' : 'roomTemperature';
 
-	await apiRequest(
-		accessToken,
-		`/gateway-devices/${deviceId}/management-points/${managementPointId}/characteristics/temperatureControl`,
-		'PATCH',
-		{
-			value: {
-				operationModes: {
-					heating: {
-						setpoints: {
-							[setpointKey]: {
-								value: value
-							}
-						}
-					}
-				}
-			}
-		}
-	);
+await apiRequest(
+    accessToken,
+    `/gateway-devices/${deviceId}/management-points/${managementPointId}/characteristics/temperatureControl/operationModes/heating/setpoints/${setpointKey}`,
+    'PATCH',
+    value
+);
 }
 
 /**
