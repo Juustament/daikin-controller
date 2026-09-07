@@ -88,8 +88,8 @@
 							{translateAction(data.nextAction.action)}
 						</span>
 						<p class="text-2xl font-bold mt-1">
-							{data.nextAction.targetTemperature}
-						</p>
+    {data.nextAction.heatingTargetTemperature ?? data.nextAction.targetTemperature}°C
+</p>
 						<p class="text-xs opacity-70 mt-1">{data.nextAction.reason}</p>
 					</div>
 				{:else}
